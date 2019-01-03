@@ -6,6 +6,10 @@ const indexRouter = require('./routes/index');
 
 const path = require('path');
 
+var http = require('http');
+var socketIO = require('socket.io');
+var io = socketIO();
+var editorSocketService = require('./services/editorSocketService')(io);
 mongoose.connect('mongodb://yutianz:zyt930615@ds145304.mlab.com:45304/1805', {useNewUrlParser: true});
 
 // response for GET request when url matches '/'
@@ -25,6 +29,12 @@ app.use((req, res) => {
   res.sendFile('index.html', { root:path.join(__dirname, '../public')});
 })
 
-app.listen(3000, () => {
-  console.log('我爱沙怡霄！');
-});
+ const server = http.createServer(app);
+ io.attach(server);
+ server.listen(3000);
+ server.on('listening', () => {
+   console.log('App is listening to port 3000! Selina!')
+ })
+// app.listen(3000, () => {
+//   console.log('我爱沙怡霄！');
+// });

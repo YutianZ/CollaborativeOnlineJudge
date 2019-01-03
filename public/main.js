@@ -204,7 +204,7 @@ module.exports = "@media screen {\n   #editor {\n     height: 600px;\n   }\n    
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"editor\">\n</div>\n"
+module.exports = "<section>\n  <header class=\"editor-header\">\n    <div class=\"row\">\n      <select class=\"form-control pull-left lang-select\"\n      name=\"language\"\n      [(ngModel)]=\"language\" (change)=\"setLanguage(language)\">\n        <option *ngFor=\"let language of languages\" [value]=\"language\">\n        {{language}}\n        </option>\n      </select>\n      <!--reset button -->\n      <!-- Button trigger modal -->\n      <button type=\"button\" class=\"btn btn-primary\" data-\ntoggle=\"modal\" data-target=\"#myModal\">\n      Reset\n      </button>\n      <!-- Modal -->\n      <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\"\n      aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n        <div class=\"modal-dialog\" role=\"document\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <h5 class=\"modal-title\" id=\"exampleModalLabel\">Are you\n                sure</h5>\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\"\n              aria-label=\"Close\">\n                <span aria-hidden=\"true\">&times;</span>\n              </button>\n            </div>\n            <div class=\"modal-body\">\n              You will lose current code in the editor, are you sure?\n            </div>\n            <div class=\"modal-footer\">\n              <button type=\"button\" class=\"btn btn-secondary\" data-\n              dismiss=\"modal\">Cancel</button>\n              <button type=\"button\" class=\"btn btn-primary\" data-\n              dismiss=\"modal\"\n              (click)=\"resetEditor()\">Reset</button>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  <div id=\"editor\">\n  </div>\n  <footer class=\"editor-footer\">\n      <button type=\"button\" class=\"btn btn-success pull-right\"\n      (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>\n"
 
 /***/ }),
 
@@ -219,6 +219,7 @@ module.exports = "<div id=\"editor\">\n</div>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditorComponent", function() { return EditorComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_collaboration_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/collaboration.service */ "./src/app/services/collaboration.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -229,9 +230,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+//the ace is not wroten by typescript, use type any.
 var EditorComponent = /** @class */ (function () {
     //use `` to write multi-line text
-    function EditorComponent() {
+    function EditorComponent(collaboration) {
+        this.collaboration = collaboration;
+        this.languages = ['Java', 'Python'];
+        this.language = 'Java'; // default language
         this.defaultContent = {
             'Java': "public class Example {\n                public static void main(String[] args) {\n                        // Type your Java code here\n                }\n             }\n        ",
             'Python': "class Solution:\n                def example():\n                        # write your Python code here"
@@ -240,8 +246,20 @@ var EditorComponent = /** @class */ (function () {
     EditorComponent.prototype.ngOnInit = function () {
         this.editor = ace.edit("editor");
         this.editor.setTheme("ace/theme/eclipse");
-        this.editor.getSession().setMode("ace/mode/java");
-        this.editor.setValue(this.defaultContent["Java"]);
+        this.resetEditor();
+        this.collaboration.init();
+    };
+    EditorComponent.prototype.resetEditor = function () {
+        this.editor.getSession().setMode("ace/mode/" + this.language.toLowerCase());
+        this.editor.setValue(this.defaultContent[this.language]);
+    };
+    EditorComponent.prototype.setLanguage = function (language) {
+        this.language = language;
+        this.resetEditor();
+    };
+    EditorComponent.prototype.submit = function () {
+        var usercode = this.editor.getValue();
+        console.log(usercode);
     };
     EditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -249,7 +267,7 @@ var EditorComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./editor.component.html */ "./src/app/components/editor/editor.component.html"),
             styles: [__webpack_require__(/*! ./editor.component.css */ "./src/app/components/editor/editor.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_services_collaboration_service__WEBPACK_IMPORTED_MODULE_1__["CollaborationService"]])
     ], EditorComponent);
     return EditorComponent;
 }());
@@ -354,7 +372,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-sm-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}. {{problem.name}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n    </div>\n  </div>\n  <div class=\"hidden-xs col-sm-12 col-md-8\">\n    <app-editor></app-editor>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"row\">\n    <div class=\"col-sm-12 col-md-4\">\n      <div>\n        <h2>\n          {{problem.id}}. {{problem.name}}\n        </h2>\n        <p>\n          {{problem.desc}}\n        </p>\n      </div>\n    </div>\n    <div class=\"hidden-xs col-sm-12 col-md-8\">\n      <app-editor></app-editor>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -485,6 +503,51 @@ var ProblemListComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_services_data_service__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
     ], ProblemListComponent);
     return ProblemListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/collaboration.service.ts":
+/*!***************************************************!*\
+  !*** ./src/app/services/collaboration.service.ts ***!
+  \***************************************************/
+/*! exports provided: CollaborationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CollaborationService", function() { return CollaborationService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CollaborationService = /** @class */ (function () {
+    function CollaborationService() {
+    }
+    CollaborationService.prototype.init = function () {
+        this.CollaborationSocket = io(window.location.origin, {
+            query: 'message=haha'
+        });
+        this.CollaborationSocket.on("message", function (message) {
+            console.log('message received from the server: ' + message);
+        });
+    };
+    CollaborationService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], CollaborationService);
+    return CollaborationService;
 }());
 
 
