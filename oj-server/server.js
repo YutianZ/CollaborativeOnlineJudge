@@ -20,6 +20,11 @@ app.use(express.static(path.join(__dirname, '../public')));
 //__dirname: current path where the file is located
 app.use('/api/v1', restRouter);
 // launch application, listen on port 3000
+
+app.use((req, res) => {
+  res.sendFile('index.html', { root:path.join(__dirname, '../public')});
+})
+
 app.listen(3000, () => {
   console.log('我爱沙怡霄！');
 });

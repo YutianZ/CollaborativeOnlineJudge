@@ -100,12 +100,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/new-problem/new-problem.component */ "./src/app/components/new-problem/new-problem.component.ts");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/editor/editor.component */ "./src/app/components/editor/editor.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -124,7 +126,8 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"],
                 _components_problem_list_problem_list_component__WEBPACK_IMPORTED_MODULE_3__["ProblemListComponent"],
                 _components_problem_detail_problem_detail_component__WEBPACK_IMPORTED_MODULE_4__["ProblemDetailComponent"],
-                _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_6__["NewProblemComponent"]
+                _components_new_problem_new_problem_component__WEBPACK_IMPORTED_MODULE_6__["NewProblemComponent"],
+                _components_editor_editor_component__WEBPACK_IMPORTED_MODULE_9__["EditorComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -179,6 +182,78 @@ var routes = [
     }
 ];
 var routing = _angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"].forRoot(routes);
+
+
+/***/ }),
+
+/***/ "./src/app/components/editor/editor.component.css":
+/*!********************************************************!*\
+  !*** ./src/app/components/editor/editor.component.css ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "@media screen {\n   #editor {\n     height: 600px;\n   }\n     .lang-select {\n     width: 100px;\n     margin-right: 10px;\n   }\n     header .btn {\n     margin: 0 5px;\n   }\n     footer .btn {\n     margin: 0 5px;\n   }\n     .editor-footer, .editor-header {\n     margin: 10px 0;\n   }\n     .cursor {\n     /*position:absolute;*/\n     background: rgba(0, 250, 0, 0.5);\n     z-index: 40;\n     width: 2px!important\n  }\n}\n"
+
+/***/ }),
+
+/***/ "./src/app/components/editor/editor.component.html":
+/*!*********************************************************!*\
+  !*** ./src/app/components/editor/editor.component.html ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div id=\"editor\">\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/editor/editor.component.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/components/editor/editor.component.ts ***!
+  \*******************************************************/
+/*! exports provided: EditorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditorComponent", function() { return EditorComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var EditorComponent = /** @class */ (function () {
+    //use `` to write multi-line text
+    function EditorComponent() {
+        this.defaultContent = {
+            'Java': "public class Example {\n                public static void main(String[] args) {\n                        // Type your Java code here\n                }\n             }\n        ",
+            'Python': "class Solution:\n                def example():\n                        # write your Python code here"
+        };
+    }
+    EditorComponent.prototype.ngOnInit = function () {
+        this.editor = ace.edit("editor");
+        this.editor.setTheme("ace/theme/eclipse");
+        this.editor.getSession().setMode("ace/mode/java");
+        this.editor.setValue(this.defaultContent["Java"]);
+    };
+    EditorComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-editor',
+            template: __webpack_require__(/*! ./editor.component.html */ "./src/app/components/editor/editor.component.html"),
+            styles: [__webpack_require__(/*! ./editor.component.css */ "./src/app/components/editor/editor.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], EditorComponent);
+    return EditorComponent;
+}());
+
 
 
 /***/ }),
@@ -279,7 +354,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-sm-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}. {{problem.name}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <div class=\"col-sm-12 col-md-4\">\n    <div>\n      <h2>\n        {{problem.id}}. {{problem.name}}\n      </h2>\n      <p>\n        {{problem.desc}}\n      </p>\n    </div>\n  </div>\n  <div class=\"hidden-xs col-sm-12 col-md-8\">\n    <app-editor></app-editor>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -459,7 +534,7 @@ var DataService = /** @class */ (function () {
         return this._problemSource.asObservable();
     };
     DataService.prototype.getProblem = function (id) {
-        return this.httpClient.get('api/v1/problems/${id}')
+        return this.httpClient.get("api/v1/problems/" + id)
             .toPromise()
             .then(function (res) { return res; })
             .catch(this.handleError);

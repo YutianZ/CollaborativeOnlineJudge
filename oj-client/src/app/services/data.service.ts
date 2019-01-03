@@ -24,7 +24,7 @@ export class DataService {
     return this._problemSource.asObservable();
   }
   getProblem(id: number): Promise<Problem> {
-    return this.httpClient.get('api/v1/problems/${id}')
+    return this.httpClient.get(`api/v1/problems/${id}`)
     .toPromise()
     .then((res: any) => res)
     .catch(this.handleError);

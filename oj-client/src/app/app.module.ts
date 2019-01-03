@@ -9,13 +9,15 @@ import { routing } from './app.routes';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { EditorComponent } from './components/editor/editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProblemListComponent,
     ProblemDetailComponent,
-    NewProblemComponent
+    NewProblemComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
