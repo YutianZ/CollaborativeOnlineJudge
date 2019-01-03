@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Problem } from '../../models/problem.model';
-import { PROBLEMS } from '../../mock-problems';
+//import { PROBLEMS } from '../../mock-problems';
 import { DataService } from '../../services/data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-problem-list',
@@ -11,13 +12,20 @@ import { DataService } from '../../services/data.service';
 
 export class ProblemListComponent implements OnInit {
   problems: Problem[];
+  subscriptionProblems: Subscription;
 
   constructor(private dataservice: DataService) { }
 
   ngOnInit() {
     this.getProblems();
   }
+  //unsubscribe when destroy to avoid memory leak
+  ngOnDestroy() {
+    this.subscriptionProblems.unsubscribe();
+  }
+  //getProblems return observable need to subscribe it.
   getProblems() {
-    this.problems = this.dataservice.getProblems();
+    this.subscriptionProblems = this.dataservice.getProblems()
+    .subscribe(problems => this.problems = problems);
   }
 }
