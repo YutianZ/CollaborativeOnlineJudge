@@ -8,7 +8,7 @@ from docker.errors import ContainerError
 from docker.errors import ImageNotFound
 
 CURRENT_DIR = os.path.dirname(__file__)
-IMAGE_NAME = 'thomas/cs50s'
+IMAGE_NAME = 'yutianz615/cs503'
 
 client = docker.from_env()
 
@@ -41,7 +41,7 @@ def load_image():
         print("image exists locally")
     except ImageNotFound:
         print("image not found locally, loading from docker hub")
-        client.image.pull(IMAGE_NAME)
+        client.images.pull(IMAGE_NAME)
     except APIError:
         print("Cannot connect to docker")
 
@@ -70,7 +70,7 @@ def build_and_run(code, lang):
     try:
         client.containers.run(
         image = IMAGE_NAME,
-        javac
+        #javac
         command = "%s %s" % (BUILD_COMMANDS[lang], SOURCE_FILE_NAMES[lang]),
         volumes = {source_file_host_dir: {'bind': source_file_guest_dir, 'mode': 'rw'}},
         working_dir = source_file_guest_dir

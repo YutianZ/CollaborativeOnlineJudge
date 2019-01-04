@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CollaborationService } from "../../services/collaboration.service";
 import { ActivatedRoute, Params } from '@angular/router';
-
+import { DataService } from '../../services/data.service';
 declare var ace: any;
 //the ace is not wroten by typescript, use type any.
 
@@ -15,6 +15,8 @@ export class EditorComponent implements OnInit {
   language: string = 'Java';// default language
   editor: any;
   sessionId: string;
+  output: string = '';
+  
   defaultContent = {
     'Java': `public class Example {
                 public static void main(String[] args) {
@@ -28,7 +30,8 @@ export class EditorComponent implements OnInit {
  };
  //use `` to write multi-line text
   constructor(private collaboration: CollaborationService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private dataService: DataService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -46,8 +49,16 @@ export class EditorComponent implements OnInit {
     this.resetEditor();
   }
   submit(): void {
+
     let usercode = this.editor.getValue();
     console.log(usercode);
+
+    const data = {
+      code: usercode,
+      lang: this.language.toLowerCase()
+    }
+
+    this.dataService.buildAndRun(data).then(res => this.output = res);
   }
   initEditor(): void {
     this.editor = ace.edit("editor");
