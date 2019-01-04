@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Subject } from "rxjs";
 
 declare var io: any;
 
@@ -6,13 +8,17 @@ declare var io: any;
   providedIn: 'root'
 })
 export class CollaborationService {
-  CollaborationSocket: any;
+  collaborationSocket: any;
+
+  restoreBuffer(): void {
+    this.collaborationSocket.emit("restoreBuffer");
+  }
   constructor() { }
   init(editor: any, sessionId: string): void {
-    this.CollaborationSocket = io(window.location.origin, {
+    this.collaborationSocket = io(window.location.origin, {
       query: 'sessionId=' + sessionId
     });
-    this.CollaborationSocket.on("change", (delta: string) => {
+    this.collaborationSocket.on("change", (delta: string) => {
       console.log('collaboration: editor changes ' + delta);
       delta = JSON.parse(delta);
       editor.lastAppliedChange = delta;
@@ -20,6 +26,6 @@ export class CollaborationService {
     })
   }
   change(delta: string): void {
-    this.CollaborationSocket.emit("change", delta);
+    this.collaborationSocket.emit("change", delta);
   }
 }

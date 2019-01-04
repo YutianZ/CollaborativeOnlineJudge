@@ -252,6 +252,7 @@ var EditorComponent = /** @class */ (function () {
             _this.sessionId = params['id'];
             _this.initEditor();
         });
+        this.collaboration.restoreBuffer();
     };
     EditorComponent.prototype.resetEditor = function () {
         this.editor.getSession().setMode("ace/mode/" + this.language.toLowerCase());
@@ -553,11 +554,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var CollaborationService = /** @class */ (function () {
     function CollaborationService() {
     }
+    CollaborationService.prototype.restoreBuffer = function () {
+        this.collaborationSocket.emit("restoreBuffer");
+    };
     CollaborationService.prototype.init = function (editor, sessionId) {
-        this.CollaborationSocket = io(window.location.origin, {
+        this.collaborationSocket = io(window.location.origin, {
             query: 'sessionId=' + sessionId
         });
-        this.CollaborationSocket.on("change", function (delta) {
+        this.collaborationSocket.on("change", function (delta) {
             console.log('collaboration: editor changes ' + delta);
             delta = JSON.parse(delta);
             editor.lastAppliedChange = delta;
@@ -565,7 +569,7 @@ var CollaborationService = /** @class */ (function () {
         });
     };
     CollaborationService.prototype.change = function (delta) {
-        this.CollaborationSocket.emit("change", delta);
+        this.collaborationSocket.emit("change", delta);
     };
     CollaborationService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

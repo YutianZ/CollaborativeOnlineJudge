@@ -26,7 +26,7 @@ app.use('/api/v1', restRouter);
 // launch application, listen on port 3000
 
 app.use((req, res) => {
-  res.sendFile('index.html', { root:path.join(__dirname, '../public')});
+  res.sendFile('index.html', {root: path.join(__dirname, '../public')});
 })
 
  const server = http.createServer(app);
